@@ -24,3 +24,6 @@ Thumbs.db
 *.log
 npm-debug.log*
 backend/tsconfig.build.tsbuildinfo
+
+# notas pessoais de estudo, não fazem parte do projeto em si
+NOTES.md
