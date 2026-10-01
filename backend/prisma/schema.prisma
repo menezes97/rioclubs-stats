@@ -1,0 +1,93 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Clube {
+  id            Int      @id @default(autoincrement())
+  nome          String
+  apelido       String?
+  escudoUrl     String?
+  corPrimaria   String? // hex, usado como acento visual no dashboard
+  cidade        String?
+  acompanhado   Boolean  @default(false) // true só para os 4 clubes cariocas que o dashboard acompanha de verdade
+  apiFootballId Int      @unique
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  partidasCasa  Partida[]     @relation("Mandante")
+  partidasFora  Partida[]     @relation("Visitante")
+  estatisticas  Estatistica[]
+}
+
+enum StatusPartida {
+  AGENDADA
+  EM_ANDAMENTO
+  FINALIZADA
+  CANCELADA
+}
+
+model Partida {
+  id            Int            @id @default(autoincrement())
+  apiFootballId Int            @unique
+  competicao    String
+  temporada     Int
+  rodada        String?
+  dataHora      DateTime
+  status        StatusPartida  @default(AGENDADA)
+  mandanteId    Int
+  visitanteId   Int
+  golsMandante  Int?
+  golsVisitante Int?
+  estadio       String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  mandante      Clube          @relation("Mandante", fields: [mandanteId], references: [id])
+  visitante     Clube          @relation("Visitante", fields: [visitanteId], references: [id])
+  estatisticas  Estatistica[]
+
+  @@index([mandanteId, visitanteId])
+}
+
+model Estatistica {
+  id               Int     @id @default(autoincrement())
+  partidaId        Int
+  clubeId          Int
+  posseBola        Int?
+  chutes           Int?
+  chutesNoGol      Int?
+  escanteios       Int?
+  faltas           Int?
+  cartoesAmarelos  Int?
+  cartoesVermelhos Int?
+
+  partida          Partida @relation(fields: [partidaId], references: [id])
+  clube            Clube   @relation(fields: [clubeId], references: [id])
+
+  @@unique([partidaId, clubeId])
+}
+
+model IngestionLog {
+  id                Int      @id @default(autoincrement())
+  executadoEm       DateTime @default(now())
+  sucesso           Boolean
+  partidasInseridas Int      @default(0)
+  mensagem          String?
+}
+
+model UsoApiExterna {
+  id       Int    @id @default(autoincrement())
+  mes      String @unique // formato "AAAA-MM" — orçamento é mensal (limite real do provedor é 100 req/mês)
+  contagem Int    @default(0)
+}
+
+model Usuario {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  senhaHash String
+  createdAt DateTime @default(now())
+}

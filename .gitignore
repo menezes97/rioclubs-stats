@@ -1,0 +1,26 @@
+# Segredos — nunca versionar
+.env
+.env.*
+!.env.example
+
+# Node / NestJS / Next.js
+backend/node_modules/
+backend/dist/
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+
+# Prisma
+backend/prisma/dev.db
+
+# IDE / OS
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+backend/tsconfig.build.tsbuildinfo

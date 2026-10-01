@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "Clube" ADD COLUMN     "acompanhado" BOOLEAN NOT NULL DEFAULT false,
+ALTER COLUMN "cidade" DROP NOT NULL,
+ALTER COLUMN "cidade" DROP DEFAULT;
