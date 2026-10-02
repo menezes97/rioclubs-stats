@@ -1,8 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Partida, StatusPartida } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service.js';
-
-const SERIE_A = 'Série A';
+import { SERIE_A } from '../common/competicoes.js';
 
 /** Gols a favor/contra e resultado (V/E/D) de uma partida, do ponto de vista de um clube específico. */
 function perspectivaDoClube(partida: Partida, clubeId: number) {

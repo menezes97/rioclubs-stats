@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { StatusPartida } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service.js';
+import { normalizarCompeticao } from '../common/competicoes.js';
 import { FootballApiService, type PartidaApi } from './football-api.service.js';
 
 export interface ResultadoIngestao {
@@ -70,7 +71,7 @@ export class IngestionService {
       create: {
         ...dados,
         apiFootballId: Number(partida.id),
-        competicao: partida.leagueName,
+        competicao: normalizarCompeticao(partida.leagueName),
         temporada: new Date(partida.matchDate).getFullYear(),
         dataHora: new Date(partida.matchDate),
         mandanteId: mandante.id,
